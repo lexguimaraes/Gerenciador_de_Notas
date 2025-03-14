@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include <gtk/gtk.h>
 
 typedef struct Materia{
      char nome[50];
@@ -14,6 +14,8 @@ typedef struct Materia{
 }materia;
 
 int is_digit(const char* s);
+
+void limpa_grid(GtkWidget* grid);
 
 
 

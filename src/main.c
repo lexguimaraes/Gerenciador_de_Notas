@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 #include "helper.h"
-
+int cont = 1;
 char nome[30];
 
 
@@ -31,42 +31,75 @@ static void print_hello(GtkWidget* widget, gpointer data) {
     GtkWidget* entry1 = g_object_get_data(G_OBJECT(widget),"entry1");
     GtkWidget* entry2 = g_object_get_data(G_OBJECT(widget), "entry2");
     GtkWidget* entry3 = g_object_get_data(G_OBJECT(widget),"entry3");
-    GtkWidget* box = g_object_get_data(G_OBJECT(widget),"box");
+    GtkWidget* grid = g_object_get_data(G_OBJECT(widget),"grid");
+    char materia_nome[50];
     const char* text = gtk_editable_get_text(GTK_EDITABLE(entry1));
-    printf("Nome da materia : %s\n",text);
-
+    strcpy(materia_nome,text);
     text = gtk_editable_get_text(GTK_EDITABLE(entry2));
     if (!is_digit(text)) {
         pop_error(widget, "Erro: Nota deve ser número",2);
         return;
     }
-    printf("%s\n",text);
+    int nota = atoi(text);
     text = gtk_editable_get_text(GTK_EDITABLE(entry3));
     if (!is_digit(text)){
         pop_error(widget, "Erro: Carga Horária deve ser número",2);
         return;
     }
-
-    GtkWidget* child;
-    while ((child = gtk_widget_get_first_child(box))!=NULL) {
-        gtk_box_remove(GTK_BOX(box),child);
-    }
-
+    int ch = atoi(text);
+    //limpa_grid(grid);
+    GtkWidget* label;
     char buff[50];
-    for (int i = 0;i < 100;i++) {
-        sprintf(buff, ("%s %d"),nome,i);
-        GtkWidget* label = gtk_label_new(buff);
-        gtk_box_append(GTK_BOX(box),label);
+    for (int i = cont;i < cont + 1;i++) {
+        label = gtk_label_new(materia_nome);
+        gtk_grid_attach(GTK_GRID(grid),label,0,i,1,1);
+
+        sprintf(buff, ("%d"),nota);
+        label = gtk_label_new(buff);
+        gtk_grid_attach(GTK_GRID(grid),label,1,i,1,1);
+
+        sprintf(buff, ("%d"),ch);
+        label = gtk_label_new(buff);
+        gtk_grid_attach(GTK_GRID(grid),label,2,i,1,1);
+        break;
     }
+    cont++;
     printf("%s\n",text);
 }
 
 
 static void removendo_notas(GtkWidget* widget, gpointer data) {
-    printf("Removendo Notas...\n");
+    GtkWidget* entry = g_object_get_data(G_OBJECT(widget), "entry");
+    GtkWidget* grid = g_object_get_data(G_OBJECT(widget), "grid_notas");
+    const char* s = gtk_editable_get_text(GTK_EDITABLE(entry));
+    printf("Removendo nota %s\n",s);
+}
+GtkWidget* cria_grid_remocao(GtkWidget* grid_notas) {
+    GtkWidget *button, *grid, *label, *entry;
+
+    grid = gtk_grid_new();
+    entry = gtk_entry_new();
+    label = gtk_label_new("Matéria a remover: ");
+
+    gtk_widget_set_halign(grid, GTK_ALIGN_CENTER);
+    gtk_widget_set_valign(grid, GTK_ALIGN_CENTER);
+
+    button = gtk_button_new_with_label("Confirmar");
+    g_signal_connect(button,"clicked", removendo_notas, NULL);
+
+    g_object_set_data(G_OBJECT(button),"entry", entry);
+    g_object_set_data(G_OBJECT(button),"grid_notas",grid_notas);
+
+
+    gtk_grid_attach(GTK_GRID(grid), label, 0,0,2,1);
+    gtk_grid_attach(GTK_GRID(grid), entry, 0,1,2,1);
+    gtk_grid_attach(GTK_GRID(grid), button,0,2,2,1);
+
+    return grid;
 }
 
-GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* content_box) {
+
+GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* grid_notas) {
     GtkWidget *button, *grid,*label;
 
     grid = gtk_grid_new();
@@ -96,7 +129,7 @@ GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* content_box) {
 
     g_object_set_data(G_OBJECT(button), "stack", stack);
     g_object_set_data(G_OBJECT(button),"entry3",entry);
-    g_object_set_data(G_OBJECT(button),"box",content_box);
+    g_object_set_data(G_OBJECT(button),"grid",grid_notas);
     g_signal_connect(button,"clicked",G_CALLBACK(print_hello),NULL);
 
     gtk_grid_attach(GTK_GRID(grid),button,0,3,2,1);
@@ -104,36 +137,23 @@ GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* content_box) {
     return grid;
 }
 
+static void atualizar_pagina_adicao(GtkWidget* widget, gpointer data) {
+    GtkWidget* grid = gtk_stack_get_child_by_name(GTK_STACK(widget),"addnota");
+    if (!grid)return;
+    gtk_stack_set_visible_child(GTK_STACK(widget),grid);
+}
+
+
 static void atualizar_pagina(GtkWidget* widget,gpointer data) {
     GtkWidget* scrolled = gtk_stack_get_child_by_name(GTK_STACK(widget), "scrollable");
     if (!scrolled)return;
-   /* printf("scrolled type: %s\n",G_OBJECT_TYPE_NAME(scrolled));
-    GtkWidget* box = gtk_scrolled_window_get_child(GTK_SCROLLED_WINDOW(scrolled));
-    if (!box) {
-        printf("not box\n");
-        return;
-    }
-    printf("Box type: %s\n", G_OBJECT_TYPE_NAME(box));
-    box = gtk_viewport_get_child(GTK_VIEWPORT(box));
-    if (!GTK_IS_BOX(box)) {
-        printf("Erro: Widget não é um GtkBox ");
-        return;
-    }
-    GtkWidget* child;
-    while ((child = gtk_widget_get_first_child(box))!=NULL) {
-        gtk_box_remove(GTK_BOX(box),child);
-    }
-
-
-    GtkWidget* label;
-    char buff[50];
-    for (int i = 0;i < 100;i++) {
-        sprintf(buff, ("%s %d"),nome,i);
-        label = gtk_label_new(buff);
-        gtk_box_append(GTK_BOX(box),label);
-    }
-    gtk_widget_set_halign(box,GTK_ALIGN_START);*/
     gtk_stack_set_visible_child(GTK_STACK(widget), scrolled);
+}
+
+static void atualizar_pagina_remocao(GtkWidget* widget, gpointer data) {
+    GtkWidget* page = gtk_stack_get_child_by_name(GTK_STACK(widget),"rem_nota");
+    if (!page)return;
+    gtk_stack_set_visible_child(GTK_STACK(widget),page);
 }
 
 
@@ -153,26 +173,46 @@ static void activate(GtkApplication* app, gpointer user_data) {
     scrollable = gtk_scrolled_window_new();
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrollable),GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-    GtkWidget* label = gtk_label_new("Adicione Notas");
+    GtkWidget* label;
 
-    gtk_box_append(GTK_BOX(content_box),label);
-
-
+    //GtkWidget* boxes = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+    GtkWidget* grid_notas = gtk_grid_new();
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrollable),content_box);
+    gtk_box_append(GTK_BOX(content_box),grid_notas);
 
 
-    gtk_stack_add_titled(GTK_STACK(stack),grid,"grid", "Menu");
+    button = gtk_button_new_with_label("                       Nota                          ");
+    gtk_grid_attach(GTK_GRID(grid_notas),button, 1,0,1,1);
+    button = gtk_button_new_with_label("                   Carga Horária                    ");
+    gtk_grid_attach(GTK_GRID(grid_notas),button, 2,0,1,1);
+    button = gtk_button_new_with_label("                   Nome da Matéria                  ");
+    gtk_grid_attach(GTK_GRID(grid_notas),button, 0,0,1,1);
+
+/*
+    label = gtk_label_new("Materia 1" );
+    gtk_grid_attach(GTK_GRID(grid_notas),label,0,1,1,1);
+    label = gtk_label_new("Nota 1");
+    gtk_grid_attach(GTK_GRID(grid_notas),label,1,1,1,1);
+    label = gtk_label_new("Carga Horária 1");
+    gtk_grid_attach(GTK_GRID(grid_notas),label,2,1,1,1);*/
+
+
+
+
+    gtk_stack_add_titled(GTK_STACK(stack), grid,"grid", "Menu");
     gtk_stack_add_titled(GTK_STACK(stack),scrollable, "scrollable","Notas");
-    gtk_stack_add_titled(GTK_STACK(stack),cria_grid(stack,content_box),"grid:2", "teste");
+    gtk_stack_add_titled(GTK_STACK(stack),cria_grid(stack,grid_notas),"addnota", "Adicionar Nota");
+    gtk_stack_add_titled(GTK_STACK(stack),cria_grid_remocao(grid_notas),"rem_nota","Remover Nota");
 
     gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(switcher), GTK_STACK(stack));
 
 
     gtk_widget_set_size_request(scrollable, 1200, 800);
+    gtk_widget_set_size_request(grid_notas, 1200, 800);
     gtk_stack_set_hhomogeneous(GTK_STACK(stack),FALSE);
     gtk_widget_set_valign(content_box, GTK_ALIGN_START);
-    gtk_widget_set_margin_start(content_box,50);
-    gtk_widget_set_halign(content_box, GTK_ALIGN_START);
+    gtk_widget_set_margin_start(content_box,70);
+    gtk_widget_set_halign(content_box, GTK_ALIGN_CENTER);
     gtk_widget_set_valign(grid, GTK_ALIGN_CENTER);
     gtk_widget_set_halign(grid, GTK_ALIGN_CENTER);
 
@@ -182,22 +222,24 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     gtk_window_set_child(GTK_WINDOW(window), box);
 
-
+    button = gtk_button_new_with_label("Adicionar Notas");
+    g_signal_connect_swapped(button,"clicked", G_CALLBACK(atualizar_pagina_adicao),stack);
+    gtk_grid_attach(GTK_GRID(grid),button,0,0,2,1);
 
 
     button = gtk_button_new_with_label("Ver Notas");
     g_signal_connect_swapped(button, "clicked", G_CALLBACK(atualizar_pagina), stack);
-    gtk_grid_attach(GTK_GRID(grid), button, 0,0,1,1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0,1,1,1);
 
 
     button = gtk_button_new_with_label("Remover Notas");
-    g_signal_connect(button, "clicked", G_CALLBACK(removendo_notas),NULL);
-    gtk_grid_attach(GTK_GRID(grid), button, 1, 0,1,1);
+    g_signal_connect_swapped(button, "clicked", G_CALLBACK(atualizar_pagina_remocao),stack);
+    gtk_grid_attach(GTK_GRID(grid), button, 1, 1,1,1);
 
 
     button = gtk_button_new_with_label("Sair");
     g_signal_connect_swapped(button, "clicked", G_CALLBACK(quit), window);
-    gtk_grid_attach(GTK_GRID(grid), button, 0 , 1, 2, 1);
+    gtk_grid_attach(GTK_GRID(grid), button, 0 , 2, 2, 1);
 
     gtk_window_present (GTK_WINDOW (window)); //spawna janela
 

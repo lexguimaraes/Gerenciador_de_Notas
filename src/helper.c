@@ -14,3 +14,11 @@ int is_digit(const char* s) {
     }
     return 1;
 }
+
+void limpa_grid(GtkWidget* grid) {
+    GtkWidget* child;
+    while ( (child = gtk_grid_get_child_at(GTK_GRID(grid),0,1)) ) {
+        gtk_grid_remove_row(GTK_GRID(grid),1);
+        printf("limpando grid %d \n",1);
+    }
+}
