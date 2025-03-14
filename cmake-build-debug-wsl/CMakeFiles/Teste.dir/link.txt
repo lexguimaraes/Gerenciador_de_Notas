@@ -1,0 +1,1 @@
+/usr/bin/gcc -g CMakeFiles/Teste.dir/src/helper.c.o CMakeFiles/Teste.dir/src/main.c.o -o Teste  -lgtk-4 -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -lgdk_pixbuf-2.0 -lcairo-gobject -lcairo -lvulkan -lgraphene-1.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0
