@@ -54,10 +54,11 @@ TLSE* TLSE_busca(TLSE* lista, const char* nome, int* ind) {
 
 
 TLSE* TLSE_insere(TLSE* lista, const char* nome, int nota, int ch,int modo,int* ind) {
-    TLSE* temp = TLSE_busca(lista, nome,ind);
+    TLSE* temp = TLSE_busca(lista, nome, ind);
     if (temp) {
-        lista = TLSE_remove(lista,nome,ind);
+        lista = TLSE_remove(lista, nome, ind);
         lista = TLSE_insere(lista, nome, nota,ch,modo, ind);
+        *ind = 1;
         return lista;
     }
 
