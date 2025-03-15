@@ -1,13 +1,30 @@
-#include <gtk/gtk.h>
 #include "helper.h"
-int cont = 1;
-char nome[30];
 
+int cont = 1;
+int modo_ord = 1;// 1 para ordenar pelas notas, 2 pela carga horária, e 3 pelo nome;
+char nome[30];
+TLSE* lista = NULL;
 
 static void quit(GtkWidget* widget, gpointer user_data) {
-
+    escreve_arq(lista,nome);
+    TLSE_libera(lista);
     gtk_window_destroy(GTK_WINDOW(widget));
 }
+
+static void ordena(GtkWidget* widget, gpointer user_data) {
+    const int novo_modo = (int)user_data;
+    if (novo_modo == modo_ord) {
+        modo_ord*=-1;
+    }
+    else modo_ord = novo_modo;
+
+    GtkWidget* grid = g_object_get_data(G_OBJECT(widget), "grid");
+    atualiza_modo(grid,&lista, modo_ord);
+    atualiza_notas(lista,grid,1);
+}
+
+
+
 static void pop_error(GtkWidget* widget, const char* erro, int time) {
     GtkRoot* root = gtk_widget_get_root(widget);
     if (!GTK_IS_WINDOW(root)) {
@@ -24,10 +41,10 @@ static void pop_error(GtkWidget* widget, const char* erro, int time) {
     gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
 
     gtk_widget_set_visible(dialog,1);
-    g_timeout_add_seconds(time,(GSourceFunc)gtk_window_destroy,dialog);
+    g_timeout_add_seconds(time,gtk_window_destroy,dialog);
 }
 
-static void print_hello(GtkWidget* widget, gpointer data) {
+static void add_Nota(GtkWidget* widget, gpointer data) {
     GtkWidget* entry1 = g_object_get_data(G_OBJECT(widget),"entry1");
     GtkWidget* entry2 = g_object_get_data(G_OBJECT(widget), "entry2");
     GtkWidget* entry3 = g_object_get_data(G_OBJECT(widget),"entry3");
@@ -37,34 +54,22 @@ static void print_hello(GtkWidget* widget, gpointer data) {
     strcpy(materia_nome,text);
     text = gtk_editable_get_text(GTK_EDITABLE(entry2));
     if (!is_digit(text)) {
-        pop_error(widget, "Erro: Nota deve ser número",2);
+        pop_error(widget, "Erro: Nota deve ser número",1);
         return;
     }
     int nota = atoi(text);
     text = gtk_editable_get_text(GTK_EDITABLE(entry3));
     if (!is_digit(text)){
-        pop_error(widget, "Erro: Carga Horária deve ser número",2);
+        pop_error(widget, "Erro: Carga Horária deve ser número",1);
         return;
     }
     int ch = atoi(text);
-    //limpa_grid(grid);
-    GtkWidget* label;
-    char buff[50];
-    for (int i = cont;i < cont + 1;i++) {
-        label = gtk_label_new(materia_nome);
-        gtk_grid_attach(GTK_GRID(grid),label,0,i,1,1);
-
-        sprintf(buff, ("%d"),nota);
-        label = gtk_label_new(buff);
-        gtk_grid_attach(GTK_GRID(grid),label,1,i,1,1);
-
-        sprintf(buff, ("%d"),ch);
-        label = gtk_label_new(buff);
-        gtk_grid_attach(GTK_GRID(grid),label,2,i,1,1);
-        break;
+    if (nota > 100 || nota < 0) {
+        pop_error(widget, "Nota deve ser menor do que 100 e maior do que 0",1);
     }
-    cont++;
-    printf("%s\n",text);
+    int ind;
+    lista = TLSE_insere(lista, materia_nome,nota,ch,modo_ord, &ind);
+    atualiza_notas(lista, grid, ind);
 }
 
 
@@ -72,14 +77,19 @@ static void removendo_notas(GtkWidget* widget, gpointer data) {
     GtkWidget* entry = g_object_get_data(G_OBJECT(widget), "entry");
     GtkWidget* grid = g_object_get_data(G_OBJECT(widget), "grid_notas");
     const char* s = gtk_editable_get_text(GTK_EDITABLE(entry));
-    printf("Removendo nota %s\n",s);
+    int ind = -1;
+    lista = TLSE_remove(lista,s,&ind);
+    if (ind == -1) {
+        pop_error(widget, "Matéria não encontrada",1);
+    }else atualiza_notas(lista,grid,ind);
+
 }
 GtkWidget* cria_grid_remocao(GtkWidget* grid_notas) {
     GtkWidget *button, *grid, *label, *entry;
 
     grid = gtk_grid_new();
     entry = gtk_entry_new();
-    label = gtk_label_new("Matéria a remover: ");
+    label = cria_label_contorno("Matéria a remover: ","contorno");
 
     gtk_widget_set_halign(grid, GTK_ALIGN_CENTER);
     gtk_widget_set_valign(grid, GTK_ALIGN_CENTER);
@@ -109,19 +119,19 @@ GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* grid_notas) {
     button = gtk_button_new_with_label("Confirmar");
 
     GtkWidget* entry = gtk_entry_new();
-    label = gtk_label_new("Nome da matéria : ");
+    label = cria_label_contorno("Nome da matéria : ","contorno");
     gtk_grid_attach(GTK_GRID(grid),label,0,0,1,1);
     gtk_grid_attach(GTK_GRID(grid),entry,1,0,1,1);
     g_object_set_data(G_OBJECT(button), "entry1", entry);
 
-    label = gtk_label_new("Nota : ");
+    label = cria_label_contorno("Nota : ","contorno");
     entry = gtk_entry_new();
 
     gtk_grid_attach(GTK_GRID(grid),label,0,1,1,1);
     gtk_grid_attach(GTK_GRID(grid),entry,1,1,1,1);
     g_object_set_data(G_OBJECT(button), "entry2", entry);
 
-    label = gtk_label_new("Carga Horária : ");
+    label = cria_label_contorno("Carga Horária : ","contorno");
     entry = gtk_entry_new();
 
     gtk_grid_attach(GTK_GRID(grid),label,0,2,1,1);
@@ -130,7 +140,7 @@ GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* grid_notas) {
     g_object_set_data(G_OBJECT(button), "stack", stack);
     g_object_set_data(G_OBJECT(button),"entry3",entry);
     g_object_set_data(G_OBJECT(button),"grid",grid_notas);
-    g_signal_connect(button,"clicked",G_CALLBACK(print_hello),NULL);
+    g_signal_connect(button,"clicked",G_CALLBACK(add_Nota),NULL);
 
     gtk_grid_attach(GTK_GRID(grid),button,0,3,2,1);
 
@@ -175,19 +185,32 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     GtkWidget* label;
 
-    //GtkWidget* boxes = gtk_box_new(GTK_ORIENTATION_VERTICAL,0);
+
     GtkWidget* grid_notas = gtk_grid_new();
     gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(scrollable),content_box);
     gtk_box_append(GTK_BOX(content_box),grid_notas);
 
 
-    button = gtk_button_new_with_label("                       Nota                          ");
+    button = gtk_button_new_with_label("                         Nota                        ");
+    g_object_set_data(G_OBJECT(button), "grid",grid_notas);
+    g_signal_connect(button, "clicked", G_CALLBACK(ordena), (gpointer)1);
     gtk_grid_attach(GTK_GRID(grid_notas),button, 1,0,1,1);
+
     button = gtk_button_new_with_label("                   Carga Horária                    ");
+    g_object_set_data(G_OBJECT(button), "grid",grid_notas);
+    g_signal_connect(button, "clicked", G_CALLBACK(ordena), (gpointer)2);
     gtk_grid_attach(GTK_GRID(grid_notas),button, 2,0,1,1);
+
     button = gtk_button_new_with_label("                   Nome da Matéria                  ");
+    g_object_set_data(G_OBJECT(button), "grid",grid_notas);
+    g_signal_connect(button, "clicked", G_CALLBACK(ordena), (gpointer)3);
     gtk_grid_attach(GTK_GRID(grid_notas),button, 0,0,1,1);
 
+    label = cria_label_contorno("    CR:     ", "destaque");
+    gtk_grid_attach(GTK_GRID(grid_notas),label, 3,0,1,1);
+
+    inicializa_lista(&lista, nome,modo_ord);
+    atualiza_notas(lista,grid_notas,1);
 /*
     label = gtk_label_new("Materia 1" );
     gtk_grid_attach(GTK_GRID(grid_notas),label,0,1,1,1);
@@ -238,8 +261,11 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
 
     button = gtk_button_new_with_label("Sair");
-    g_signal_connect_swapped(button, "clicked", G_CALLBACK(quit), window);
+    g_signal_connect_swapped(button, "clicked", G_CALLBACK(gtk_window_destroy), window);
+    g_signal_connect (window, "destroy", G_CALLBACK (quit), NULL);
     gtk_grid_attach(GTK_GRID(grid), button, 0 , 2, 2, 1);
+
+
 
     gtk_window_present (GTK_WINDOW (window)); //spawna janela
 
@@ -275,7 +301,9 @@ static void activate_init(GtkApplication* app, gpointer user_data) {
     GtkCssProvider* provider = gtk_css_provider_new();
     gtk_css_provider_load_from_string(provider,
         "window, label, button, entry { font-size: 14pt; }"
-        ".title-label { font-size: 18pt; font-weight: bold; }");
+        ".title-label { font-size: 18pt; font-weight: bold; }"
+        ".contorno { border: 1px solid #aab1b9; border-radius: 6px; padding: 4px 8px; margin: 0px; }"
+        ".destaque { box-shadow: 0 0 0 2px blue;border: 2px solid #3584e4; border-radius:5px; background-color: #f0f0f0; padding: 5px; margin: 0px; }");
 
     // Aplicar globalmente
     GdkDisplay* display = gdk_display_get_default();
@@ -296,7 +324,7 @@ static void activate_init(GtkApplication* app, gpointer user_data) {
 
 
     GtkWidget* entry = gtk_entry_new();
-    GtkWidget* label = gtk_label_new("Digite seu nome abaixo:");
+    GtkWidget* label = cria_label_contorno("Digite seu nome abaixo:","contorno");
     gtk_grid_attach(GTK_GRID(grid),label,0,0,2,1);
     gtk_grid_attach(GTK_GRID(grid),entry,0,1,2,1);
     gtk_window_set_child(GTK_WINDOW(window),grid);
@@ -323,7 +351,7 @@ int main(int argc, char** argv){
     int status;
     app = gtk_application_new("vasco.gigante", G_APPLICATION_DEFAULT_FLAGS);
     g_signal_connect(app, "startup", G_CALLBACK(ativar_tema), NULL);
-    g_signal_connect (app, "activate", G_CALLBACK(activate_init),NULL); // conecta nossa janela a função activate para ativa-la
+    g_signal_connect (app, "activate", G_CALLBACK(activate_init),NULL);// conecta nossa janela a função activate para ativa-la
     status = g_application_run(G_APPLICATION (app), argc,argv);
     g_object_unref(app);
     return status;

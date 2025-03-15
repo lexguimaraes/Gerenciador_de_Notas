@@ -2,20 +2,23 @@
 #define HELPER_H
 
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <gtk/gtk.h>
+#include "TLSE.h"
 
-typedef struct Materia{
-     char nome[50];
-     int nota;
-     int ch;
-}materia;
 
 int is_digit(const char* s);
 
-void limpa_grid(GtkWidget* grid);
+void limpa_grid(GtkWidget* grid,int ind);
+
+GtkWidget* cria_label_contorno(const char* s, const char* classe);
+
+void escreve_arq(TLSE* lista, const char* nome);
+
+void inicializa_lista(TLSE** lista, const char* nome,int modo);
+
+void atualiza_notas(TLSE* lista, GtkWidget* grid,int i);
+
+void atualiza_modo(GtkWidget* grid, TLSE** lista, int modo);
 
 
 

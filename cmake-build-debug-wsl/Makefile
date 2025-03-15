@@ -129,6 +129,30 @@ Teste/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Teste.dir/build.make CMakeFiles/Teste.dir/build
 .PHONY : Teste/fast
 
+src/TLSE.o: src/TLSE.c.o
+.PHONY : src/TLSE.o
+
+# target to build an object file
+src/TLSE.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Teste.dir/build.make CMakeFiles/Teste.dir/src/TLSE.c.o
+.PHONY : src/TLSE.c.o
+
+src/TLSE.i: src/TLSE.c.i
+.PHONY : src/TLSE.i
+
+# target to preprocess a source file
+src/TLSE.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Teste.dir/build.make CMakeFiles/Teste.dir/src/TLSE.c.i
+.PHONY : src/TLSE.c.i
+
+src/TLSE.s: src/TLSE.c.s
+.PHONY : src/TLSE.s
+
+# target to generate assembly for a file
+src/TLSE.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Teste.dir/build.make CMakeFiles/Teste.dir/src/TLSE.c.s
+.PHONY : src/TLSE.c.s
+
 src/helper.o: src/helper.c.o
 .PHONY : src/helper.o
 
@@ -186,6 +210,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... Teste"
+	@echo "... src/TLSE.o"
+	@echo "... src/TLSE.i"
+	@echo "... src/TLSE.s"
 	@echo "... src/helper.o"
 	@echo "... src/helper.i"
 	@echo "... src/helper.s"

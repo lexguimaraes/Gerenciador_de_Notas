@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/Teste.dir/src/TLSE.c.o"
+  "CMakeFiles/Teste.dir/src/TLSE.c.o.d"
   "CMakeFiles/Teste.dir/src/helper.c.o"
   "CMakeFiles/Teste.dir/src/helper.c.o.d"
   "CMakeFiles/Teste.dir/src/main.c.o"

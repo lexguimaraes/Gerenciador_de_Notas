@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/mnt/c/Users/alexf/CLionProjects/Testes/src/TLSE.c" "CMakeFiles/Teste.dir/src/TLSE.c.o" "gcc" "CMakeFiles/Teste.dir/src/TLSE.c.o.d"
   "/mnt/c/Users/alexf/CLionProjects/Testes/src/helper.c" "CMakeFiles/Teste.dir/src/helper.c.o" "gcc" "CMakeFiles/Teste.dir/src/helper.c.o.d"
   "/mnt/c/Users/alexf/CLionProjects/Testes/src/main.c" "CMakeFiles/Teste.dir/src/main.c.o" "gcc" "CMakeFiles/Teste.dir/src/main.c.o.d"
   )
