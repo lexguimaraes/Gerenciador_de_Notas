@@ -73,7 +73,7 @@ static void add_Nota(GtkWidget* widget, gpointer data) {
     }
     int ch = atoi(text);
     if (nota > 100 || nota < 0) {
-        pop_error(widget, "Nota deve ser menor do que 100 e maior do que 0",1);
+        pop_error(widget, "Erro: Nota deve ser menor do que 100 e maior do que 0",1);
     }
     int ind;
     lista = TLSE_insere(lista, materia_nome,nota,ch,modo_ord, &ind);
