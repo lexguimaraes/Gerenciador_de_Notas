@@ -29,7 +29,7 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
     make
     ```
 
-4. Execute o aplicativo:
+4. Execute o programa:
     ```bash
     ./gerenciador-notas
     ```
@@ -38,7 +38,7 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
 
 1. Instale o MSYS2 de [msys2.org](https://www.msys2.org/).
 
-2. Abra o terminal MSYS2 MinGW64 e instale as dependências:
+2. Abra o terminal MSYS2 MinGW64 e instale as dependências necessária:
     ```bash
     pacman -S mingw-w64-x86_64-gtk4 mingw-w64-x86_64-gcc mingw-w64-x86_64-pkgconf
     ```
@@ -56,18 +56,18 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
     gcc ../src/*.c -o ../bin/gerenciador_notas.exe `pkg-config --cflags --libs gtk4` -mwindows
     ```
 
-5. Execute o aplicativo:
+5. Execute o programa:
     ```bash
     ./bin/gerenciador_notas.exe
     ```
 
 ## Uso
 
-1. Ao iniciar o aplicativo, digite seu nome e clique em "Confirmar".
+1. Ao iniciar o programa, digite seu nome e clique em "Confirmar".
 2. Utilize os botões para adicionar, remover e visualizar notas.
 3. As notas são salvas automaticamente em arquivos `.bin` e planilhas `.csv`.
 4. Ao inserir matérias com o mesmo nome, elas serão apenas atualizadas com a nova nota e a nova carga horária.
-5. Em sequentes usos com o mesmo nome, as notas continuam da última forma que o programa foi utilizado.
+5. Em sequentes usos com o mesmo nome, as notas continuam da última forma que o programa foi utilizado, evitando a necessidade de reescrever as notas.
 
 ## Licença
 
