@@ -1,4 +1,0 @@
-/usr/local/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=/usr/bin/gcc -G "Unix Makefiles" -S /mnt/c/Users/alexf/CLionProjects/Testes -B /mnt/c/Users/alexf/CLionProjects/Testes/cmake-build-debug-wsl
--- Configuring done (0.1s)
--- Generating done (0.2s)
--- Build files have been written to: /mnt/c/Users/alexf/CLionProjects/Testes/cmake-build-debug-wsl
