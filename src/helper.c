@@ -15,6 +15,15 @@ int is_digit(const char* s) {
     return 1;
 }
 
+int is_word(const char* s) {
+    const char* p = s;
+    while (*p) {
+        if (*p != ' ')return 1;
+        p++;
+    }
+    return 0;
+}
+
 void limpa_grid(GtkWidget* grid,int ind) {
     GtkWidget* child;
     while ( (child = gtk_grid_get_child_at(GTK_GRID(grid),0,ind)) ) {

@@ -5,6 +5,7 @@
 #include <gtk/gtk.h>
 #include "TLSE.h"
 
+int is_word(const char* s);
 
 int is_digit(const char* s);
 

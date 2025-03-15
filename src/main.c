@@ -51,6 +51,10 @@ static void add_Nota(GtkWidget* widget, gpointer data) {
     GtkWidget* grid = g_object_get_data(G_OBJECT(widget),"grid");
     char materia_nome[50];
     const char* text = gtk_editable_get_text(GTK_EDITABLE(entry1));
+    if (!*text || *text == ' ') {
+        pop_error(widget, "Erro: Insira um nome",1);
+        return;
+    }
     strcpy(materia_nome,text);
     text = gtk_editable_get_text(GTK_EDITABLE(entry2));
     if (!is_digit(text)) {
