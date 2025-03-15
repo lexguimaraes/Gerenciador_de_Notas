@@ -52,8 +52,9 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
 4. Compile o projeto:
     ```bash
     mkdir build
+    mkdir bin
     cd build
-    gcc ../src/*.c -o ../bin/gerenciador_notas.exe `pkg-config --cflags --libs gtk4` -mwindows
+    gcc ../src/*.c -o ./bin/gerenciador_notas.exe `pkg-config --cflags --libs gtk4` -mwindows
     ```
 
 5. Execute o programa:
@@ -68,6 +69,18 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
 3. As notas são salvas automaticamente em arquivos `.bin` e planilhas `.csv`.
 4. Ao inserir matérias com o mesmo nome, elas serão apenas atualizadas com a nova nota e a nova carga horária.
 5. Em sequentes usos com o mesmo nome, as notas continuam da última forma que o programa foi utilizado, evitando a necessidade de reescrever as notas.
+
+## Troubleshooting
+
+1. Em caso desse erro: "Package gtk4 was not found in the pkg-config search path." Tente: 
+   ```bash
+   export PKG_CONFIG_PATH=/mingw64/lib/pkgconfig:$PKG_CONFIG_PATH
+   export XDG_DATA_DIRS=/mingw64/share:$XDG_DATA_DIRS
+   ```
+2. Em caso desse erro: "bash: gcc: command not found." Tente:
+   ```bash
+   export PATH=/mingw64/bin:$PATH
+   ```
 
 ## Licença
 
