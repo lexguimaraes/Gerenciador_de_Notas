@@ -8,18 +8,22 @@ TLSE* lista = NULL;
 static void quit(GtkWidget* widget, gpointer user_data) {
     escreve_arq(lista,nome);
     TLSE_libera(lista);
-    gtk_window_destroy(GTK_WINDOW(widget));
+    //gtk_window_destroy(GTK_WINDOW(widget));
 }
 
 static void ordena(GtkWidget* widget, gpointer user_data) {
     const int novo_modo = (int)user_data;
     if (novo_modo == modo_ord) {
         modo_ord*=-1;
+        lista = TLSE_reverse(lista);
     }
-    else modo_ord = novo_modo;
+    else {
+        modo_ord = novo_modo;
+        atualiza_modo(&lista, modo_ord);
+    }
+
 
     GtkWidget* grid = g_object_get_data(G_OBJECT(widget), "grid");
-    atualiza_modo(grid,&lista, modo_ord);
     atualiza_notas(lista,grid,1);
 }
 

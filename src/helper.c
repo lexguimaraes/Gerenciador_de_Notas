@@ -77,9 +77,8 @@ void atualiza_notas(TLSE* lista, GtkWidget* grid,int i) {
     gtk_grid_attach(GTK_GRID(grid),label,3,1,1,1);
 }
 
-void atualiza_modo(GtkWidget* grid, TLSE** lista,const int modo) {
+void atualiza_modo(TLSE** lista,const int modo) {
     TLSE* p = *lista;
-    limpa_grid(grid,1);
     TLSE* new = NULL;
     int ph;
     while (p) {
@@ -133,4 +132,15 @@ void inicializa_lista(TLSE** lista, const char* nome,int modo) {
     }
     fclose(f);
     *lista = p;
+}
+
+TLSE* TLSE_reverse(TLSE* lista) {
+    TLSE* p = lista, *ant = NULL, * prox = NULL;
+    while (p) {
+        prox = p->next;
+        p->next = ant;
+        ant = p;
+        p = prox;
+    }
+    return ant;
 }

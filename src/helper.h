@@ -19,9 +19,9 @@ void inicializa_lista(TLSE** lista, const char* nome,int modo);
 
 void atualiza_notas(TLSE* lista, GtkWidget* grid,int i);
 
-void atualiza_modo(GtkWidget* grid, TLSE** lista, int modo);
+void atualiza_modo(TLSE** lista, int modo);
 
-
+TLSE* TLSE_reverse(TLSE* lista);
 
 
 
