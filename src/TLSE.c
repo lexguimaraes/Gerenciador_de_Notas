@@ -3,7 +3,6 @@
 
 
 void TLSE_libera(TLSE* lista) {
-    int i = 0;
     while (lista) {
         TLSE* t = lista->next;
         free(lista->mat);

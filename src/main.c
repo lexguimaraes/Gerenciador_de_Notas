@@ -1,7 +1,7 @@
 #include "helper.h"
 
 int cont = 1;
-int modo_ord = 1;// 1 para ordenar pelas notas, 2 pela carga horária, e 3 pelo nome;
+int modo_ord = 1;// 1 para ordenar pelas notas, 2 pela carga horária, e 3 pelo nome, valores negativos para decrescente;
 char nome[30];
 TLSE* lista = NULL;
 
@@ -77,7 +77,7 @@ static void add_Nota(GtkWidget* widget, gpointer data) {
 }
 
 
-static void removendo_notas(GtkWidget* widget, gpointer data) {
+static void rem_Nota(GtkWidget* widget, gpointer data) {
     GtkWidget* entry = g_object_get_data(G_OBJECT(widget), "entry");
     GtkWidget* grid = g_object_get_data(G_OBJECT(widget), "grid_notas");
     const char* s = gtk_editable_get_text(GTK_EDITABLE(entry));
@@ -99,7 +99,7 @@ GtkWidget* cria_grid_remocao(GtkWidget* grid_notas) {
     gtk_widget_set_valign(grid, GTK_ALIGN_CENTER);
 
     button = gtk_button_new_with_label("Confirmar");
-    g_signal_connect(button,"clicked", removendo_notas, NULL);
+    g_signal_connect(button,"clicked", rem_Nota, NULL);
 
     g_object_set_data(G_OBJECT(button),"entry", entry);
     g_object_set_data(G_OBJECT(button),"grid_notas",grid_notas);
@@ -113,7 +113,7 @@ GtkWidget* cria_grid_remocao(GtkWidget* grid_notas) {
 }
 
 
-GtkWidget* cria_grid(GtkWidget* stack,GtkWidget* grid_notas) {
+GtkWidget* cria_grid_adicao(GtkWidget* stack,GtkWidget* grid_notas) {
     GtkWidget *button, *grid,*label;
 
     grid = gtk_grid_new();
@@ -219,7 +219,7 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     gtk_stack_add_titled(GTK_STACK(stack), grid,"grid", "Menu");
     gtk_stack_add_titled(GTK_STACK(stack),scrollable, "scrollable","Notas");
-    gtk_stack_add_titled(GTK_STACK(stack),cria_grid(stack,grid_notas),"addnota", "Adicionar Nota");
+    gtk_stack_add_titled(GTK_STACK(stack),cria_grid_adicao(stack,grid_notas),"addnota", "Adicionar Nota");
     gtk_stack_add_titled(GTK_STACK(stack),cria_grid_remocao(grid_notas),"rem_nota","Remover Nota");
 
     gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(switcher), GTK_STACK(stack));
@@ -291,7 +291,7 @@ static void ler_entrada(GtkWidget* button, gpointer user_data) {
 
 
 static void activate_init(GtkApplication* app, gpointer user_data) {
-    // Configurar CSS para fontes
+    // ajeitar fonte e custom labels
     GtkCssProvider* provider = gtk_css_provider_new();
     gtk_css_provider_load_from_string(provider,
         "window, label, button, entry { font-size: 14pt; }"
@@ -299,7 +299,7 @@ static void activate_init(GtkApplication* app, gpointer user_data) {
         ".contorno { border: 1px solid #aab1b9; border-radius: 6px; padding: 4px 8px; margin: 0px; }"
         ".destaque { box-shadow: 0 0 0 2px blue;border: 2px solid #3584e4; border-radius:5px; background-color: #f0f0f0; padding: 5px; margin: 0px; }");
 
-    // Aplicar globalmente
+    // aplicar
     GdkDisplay* display = gdk_display_get_default();
     gtk_style_context_add_provider_for_display(display,
         GTK_STYLE_PROVIDER(provider),
