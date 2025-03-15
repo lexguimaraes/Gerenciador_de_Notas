@@ -199,22 +199,22 @@ static void activate(GtkApplication* app, gpointer user_data) {
     gtk_box_append(GTK_BOX(content_box),grid_notas);
 
 
-    button = gtk_button_new_with_label("                         Nota                        ");
+    button = gtk_button_new_with_label("               Nota               ");
     g_object_set_data(G_OBJECT(button), "grid",grid_notas);
     g_signal_connect(button, "clicked", G_CALLBACK(ordena), (gpointer)1);
     gtk_grid_attach(GTK_GRID(grid_notas),button, 1,0,1,1);
 
-    button = gtk_button_new_with_label("                   Carga Horária                    ");
+    button = gtk_button_new_with_label("               Carga Horária               ");
     g_object_set_data(G_OBJECT(button), "grid",grid_notas);
     g_signal_connect(button, "clicked", G_CALLBACK(ordena), (gpointer)2);
     gtk_grid_attach(GTK_GRID(grid_notas),button, 2,0,1,1);
 
-    button = gtk_button_new_with_label("                   Nome da Matéria                  ");
+    button = gtk_button_new_with_label("               Nome da Matéria               ");
     g_object_set_data(G_OBJECT(button), "grid",grid_notas);
     g_signal_connect(button, "clicked", G_CALLBACK(ordena), (gpointer)3);
     gtk_grid_attach(GTK_GRID(grid_notas),button, 0,0,1,1);
 
-    label = cria_label_contorno("    CR:     ", "destaque");
+    label = cria_label_contorno("         CR:         ", "destaque");
     gtk_grid_attach(GTK_GRID(grid_notas),label, 3,0,1,1);
 
     inicializa_lista(&lista, nome,modo_ord);
@@ -228,9 +228,11 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     gtk_stack_switcher_set_stack(GTK_STACK_SWITCHER(switcher), GTK_STACK(stack));
 
+    gtk_box_append(GTK_BOX(box),switcher);
+    gtk_box_append(GTK_BOX(box),stack);
 
     gtk_widget_set_size_request(scrollable, 1200, 800);
-    gtk_widget_set_size_request(grid_notas, 1200, 800);
+    gtk_widget_set_size_request(grid_notas, 1000, 800);
     gtk_stack_set_hhomogeneous(GTK_STACK(stack),FALSE);
     gtk_widget_set_valign(content_box, GTK_ALIGN_START);
     gtk_widget_set_margin_start(content_box,70);
@@ -239,8 +241,6 @@ static void activate(GtkApplication* app, gpointer user_data) {
     gtk_widget_set_halign(grid, GTK_ALIGN_CENTER);
 
 
-    gtk_box_append(GTK_BOX(box),switcher);
-    gtk_box_append(GTK_BOX(box),stack);
 
     gtk_window_set_child(GTK_WINDOW(window), box);
 
