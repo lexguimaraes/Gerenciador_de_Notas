@@ -12,7 +12,7 @@ static void quit(GtkWidget* widget, gpointer user_data) {
 }
 
 static void ordena(GtkWidget* widget, gpointer user_data) {
-    const int novo_modo = (int)user_data;
+    const int novo_modo = GPOINTER_TO_INT(user_data);
     if (novo_modo == modo_ord) {
         modo_ord*=-1;
         lista = TLSE_reverse(lista);
@@ -45,7 +45,7 @@ static void pop_error(GtkWidget* widget, const char* erro, int time) {
     gtk_window_set_deletable(GTK_WINDOW(dialog),FALSE);
 
     gtk_widget_set_visible(dialog,1);
-    g_timeout_add_seconds(time,gtk_window_destroy,dialog);
+    g_timeout_add_seconds(time,(GSourceFunc)gtk_window_destroy,dialog);
 }
 
 static void add_Nota(GtkWidget* widget, gpointer data) {
@@ -103,7 +103,7 @@ GtkWidget* cria_grid_remocao(GtkWidget* grid_notas) {
     gtk_widget_set_valign(grid, GTK_ALIGN_CENTER);
 
     button = gtk_button_new_with_label("Confirmar");
-    g_signal_connect(button,"clicked", rem_Nota, NULL);
+    g_signal_connect(button,"clicked", G_CALLBACK(rem_Nota), NULL);
 
     g_object_set_data(G_OBJECT(button),"entry", entry);
     g_object_set_data(G_OBJECT(button),"grid_notas",grid_notas);
