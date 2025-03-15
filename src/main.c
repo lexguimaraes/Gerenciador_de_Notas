@@ -28,7 +28,7 @@ static void ordena(GtkWidget* widget, gpointer user_data) {
 static void pop_error(GtkWidget* widget, const char* erro, int time) {
     GtkRoot* root = gtk_widget_get_root(widget);
     if (!GTK_IS_WINDOW(root)) {
-        printf("not root\n");
+        printf("not root\nnunca deveria acontecer\n");
         return;
     }
     GtkWidget* dialog = gtk_message_dialog_new(
@@ -211,15 +211,6 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
     inicializa_lista(&lista, nome,modo_ord);
     atualiza_notas(lista,grid_notas,1);
-/*
-    label = gtk_label_new("Materia 1" );
-    gtk_grid_attach(GTK_GRID(grid_notas),label,0,1,1,1);
-    label = gtk_label_new("Nota 1");
-    gtk_grid_attach(GTK_GRID(grid_notas),label,1,1,1,1);
-    label = gtk_label_new("Carga Horária 1");
-    gtk_grid_attach(GTK_GRID(grid_notas),label,2,1,1,1);*/
-
-
 
 
     gtk_stack_add_titled(GTK_STACK(stack), grid,"grid", "Menu");
@@ -278,7 +269,6 @@ static void ler_entrada(GtkWidget* button, gpointer user_data) {
 
     const char* texto = gtk_editable_get_text(GTK_EDITABLE(entry));
     strcpy(nome,texto);
-    printf("%s\n",nome);
     char buffer[30];
     strcpy(buffer,nome);
     strcat(buffer,".bin");

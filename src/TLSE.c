@@ -9,7 +9,6 @@ void TLSE_libera(TLSE* lista) {
         free(lista->mat);
         free(lista);
         lista = t;
-        printf("itens liberados: %d\n",++i);
     }
 }
 
