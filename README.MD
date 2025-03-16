@@ -52,14 +52,13 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
 4. Compile o projeto:
     ```bash
     mkdir build
-    mkdir bin
     cd build
-    gcc ../src/*.c -o ./bin/gerenciador_notas.exe `pkg-config --cflags --libs gtk4` -mwindows
+    gcc ../src/*.c -o gerenciador_notas.exe `pkg-config --cflags --libs gtk4` -mwindows
     ```
 
 5. Execute o programa:
     ```bash
-    ./bin/gerenciador_notas.exe
+    ./gerenciador_notas.exe
     ```
 
 ## Uso
