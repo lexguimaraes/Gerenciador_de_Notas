@@ -329,7 +329,7 @@ static void activate_init(GtkApplication* app, gpointer user_data) {
 
 
     GtkWidget* entry = gtk_entry_new();
-    gtk_entry_set_max_length(GTK_ENTRY(entry), 29);
+    gtk_entry_set_max_length(GTK_ENTRY(entry), 24);
     GtkWidget* label = cria_label_contorno("Digite seu nome abaixo:","contorno");
     gtk_grid_attach(GTK_GRID(grid),label,0,0,2,1);
     gtk_grid_attach(GTK_GRID(grid),entry,0,1,2,1);
