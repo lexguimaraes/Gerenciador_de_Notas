@@ -1,7 +1,7 @@
 #include "helper.h"
 
 int cont = 1;
-int modo_ord = 1;// 1 para ordenar pelas notas, 2 pela carga horária, e 3 pelo nome, valores negativos para decrescente;
+int modo_ord = -1;// 1 para ordenar pelas notas, 2 pela carga horária, e 3 pelo nome, valores negativos para decrescente;
 char nome[30];
 TLSE* lista = NULL;
 
@@ -75,6 +75,9 @@ static void add_Nota(GtkWidget* widget, gpointer data) {
     if (nota > 100 || nota < 0) {
         pop_error(widget, "Erro: Nota deve ser menor do que 100 e maior do que 0",1);
     }
+    if (ch < 0 || ch > 200) {
+        pop_error(widget, "Erro: Carga Horária deve ser menor do que 200 e maior do que 0",1);
+    }
     int ind;
     lista = TLSE_insere(lista, materia_nome,nota,ch,modo_ord, &ind);
     atualiza_notas(lista, grid, ind);
@@ -98,12 +101,13 @@ GtkWidget* cria_grid_remocao(GtkWidget* grid_notas) {
     grid = gtk_grid_new();
     entry = gtk_entry_new();
     label = cria_label_contorno("Matéria a remover: ","contorno");
+    gtk_entry_set_max_length(GTK_ENTRY(entry), 49);
 
     gtk_widget_set_halign(grid, GTK_ALIGN_CENTER);
     gtk_widget_set_valign(grid, GTK_ALIGN_CENTER);
 
     button = gtk_button_new_with_label("Confirmar");
-    g_signal_connect(button,"clicked", G_CALLBACK(rem_Nota), NULL);
+    g_signal_connect(button, "clicked", G_CALLBACK(rem_Nota), NULL);
 
     g_object_set_data(G_OBJECT(button),"entry", entry);
     g_object_set_data(G_OBJECT(button),"grid_notas",grid_notas);
@@ -127,6 +131,7 @@ GtkWidget* cria_grid_adicao(GtkWidget* stack,GtkWidget* grid_notas) {
     button = gtk_button_new_with_label("Confirmar");
 
     GtkWidget* entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(entry), 49);
     label = cria_label_contorno("Nome da matéria : ","contorno");
     gtk_grid_attach(GTK_GRID(grid),label,0,0,1,1);
     gtk_grid_attach(GTK_GRID(grid),entry,1,0,1,1);
@@ -134,6 +139,7 @@ GtkWidget* cria_grid_adicao(GtkWidget* stack,GtkWidget* grid_notas) {
 
     label = cria_label_contorno("Nota : ","contorno");
     entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(entry), 3);
 
     gtk_grid_attach(GTK_GRID(grid),label,0,1,1,1);
     gtk_grid_attach(GTK_GRID(grid),entry,1,1,1,1);
@@ -141,6 +147,7 @@ GtkWidget* cria_grid_adicao(GtkWidget* stack,GtkWidget* grid_notas) {
 
     label = cria_label_contorno("Carga Horária : ","contorno");
     entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(entry), 3);
 
     gtk_grid_attach(GTK_GRID(grid),label,0,2,1,1);
     gtk_grid_attach(GTK_GRID(grid),entry,1,2,1,1);
@@ -322,6 +329,7 @@ static void activate_init(GtkApplication* app, gpointer user_data) {
 
 
     GtkWidget* entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(entry), 29);
     GtkWidget* label = cria_label_contorno("Digite seu nome abaixo:","contorno");
     gtk_grid_attach(GTK_GRID(grid),label,0,0,2,1);
     gtk_grid_attach(GTK_GRID(grid),entry,0,1,2,1);
