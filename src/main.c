@@ -185,7 +185,7 @@ static void atualizar_pagina_remocao(GtkWidget* widget, gpointer data) {
 static void activate(GtkApplication* app, gpointer user_data) {
     GtkWidget* window, *button, *grid,*stack,*box,*switcher,*scrollable,*content_box;
     window = gtk_application_window_new(app); // cria janela
-    gtk_window_set_title(GTK_WINDOW (window), "vasco"); //define titulo
+    gtk_window_set_title(GTK_WINDOW (window), "Gerenciador de Notas"); //define titulo
     gtk_window_set_default_size(GTK_WINDOW(window),1200,800); //define tamanho
 
 
@@ -321,7 +321,7 @@ static void activate_init(GtkApplication* app, gpointer user_data) {
 
     GtkWidget* window, *button, *grid;
     window = gtk_application_window_new(app);
-    gtk_window_set_title(GTK_WINDOW (window), "vasco");
+    gtk_window_set_title(GTK_WINDOW (window), "Gerenciador de Notas");
     gtk_window_set_default_size(GTK_WINDOW(window),500,800);
     grid = gtk_grid_new();
     gtk_widget_set_halign(grid, GTK_ALIGN_CENTER);

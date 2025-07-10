@@ -6,6 +6,26 @@ Aplicativo para gerenciar notas acadêmicas utilizando GTK4.
 
 Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remover e visualizar notas de diferentes matérias. Ele foi desenvolvido em C utilizando a biblioteca GTK4 para a interface gráfica. Produzido com o objetivo de aprendizado.
 
+Tela inicial: 
+
+[<img src ="TelaInicial.png" height = "600"/>](TelaInicial.png "Tela Inicial")
+
+Menu:
+
+[<img src ="Menu.png" width = "800"/>](Menu.png "Menu")
+
+Visualizar Notas:
+
+[<img src ="Notas.png" width = "800"/>](Notas.png "Notas")
+
+Adicionar Nota:
+
+[<img src ="AddNota.png" width = "800"/>](AddNota.png "Adicionar Nota")
+
+Remover Nota:
+
+[<img src ="RemNota.png" width = "800"/>](RemNota.png "Remover Nota")
+
 ## Instalação
 
 ### Linux

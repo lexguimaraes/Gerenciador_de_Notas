@@ -102,19 +102,21 @@ void escreve_arq(TLSE* lista, const char* nome) {
     strcat(buff,".csv");
     FILE* ftxt = fopen(buff, "wt");
     if (!ftxt)exit(1);
-    fprintf(ftxt,"  Materias  ;  Notas  ;  Carga Horária  ;  CR  \n");
+    fprintf(ftxt,"  Materias  ;  Notas  ;  Carga Horária  ;  CR   ;   CH Total\n");
     int notas = 0, ch = 0;
     double cr = 0;
+    int dif = 0;
     while (lista) {
         fwrite(lista->mat, sizeof(materia),1,fbin);
-        fprintf(ftxt,"  %s  ;  %d  ;  %d  ;\n",lista->mat->nome,lista->mat->nota,lista->mat->ch);
+        fprintf(ftxt,"  %s  ;  %d  ;  %d ;;\n ",lista->mat->nome,lista->mat->nota,lista->mat->ch);
+        if (lista->mat->nota < 60)dif += lista->mat->ch;
         notas += lista->mat->nota * lista->mat->ch;
         ch += lista->mat->ch;
         lista = lista->next;
     }
     cr = (1.0*notas)/(1.0*ch);
     cr/= 10.0;
-    fprintf(ftxt, ";;; %.3f",cr);
+    fprintf(ftxt, ";;; %.3f; %d",cr,ch - dif);
     fclose(fbin);
     fclose(ftxt);
 }
