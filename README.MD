@@ -8,23 +8,23 @@ Este projeto é um gerenciador de notas acadêmicas que permite adicionar, remov
 
 Tela inicial: 
 
-[<img src ="TelaInicial.png" height = "600"/>](TelaInicial.png "Tela Inicial")
+![Tela Inicial](TelaInicial.png "Tela Inicial")
 
 Menu:
 
-[<img src ="Menu.png" width = "800"/>](Menu.png "Menu")
+![Menu](Menu.png "Menu")
 
 Visualizar Notas:
 
-[<img src ="Notas.png" width = "800"/>](Notas.png "Notas")
+![Notas](Notas.png "Notas")
 
 Adicionar Nota:
 
-[<img src ="AddNota.png" width = "800"/>](AddNota.png "Adicionar Nota")
+![Adicionar Nota](AddNota.png "Adicionar Nota")
 
 Remover Nota:
 
-[<img src ="RemNota.png" width = "800"/>](RemNota.png "Remover Nota")
+![Remover Nota](RemNota.png "Remover Nota")
 
 ## Instalação
 
