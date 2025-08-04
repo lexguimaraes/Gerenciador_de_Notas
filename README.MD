@@ -58,7 +58,7 @@ Remover Nota:
 
 1. Instale o MSYS2 de [msys2.org](https://www.msys2.org/).
 
-2. Abra o terminal MSYS2 MinGW64 e instale as dependências necessária:
+2. Abra o terminal MSYS2 MinGW64 e instale as dependências necessárias:
     ```bash
     pacman -S mingw-w64-x86_64-gtk4 mingw-w64-x86_64-gcc mingw-w64-x86_64-pkgconf
     ```
